@@ -1,0 +1,50 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<html>
+    <head>
+        <meta http-equip="Content-Type" content="text/html; charset=ISO-8859-1">
+        <title>Edit chosen movie</title>
+        <style>
+            div.field {
+                padding-bottom: 5px;
+            }
+            div.field label {
+                padding-top: 3px;
+                display: block;
+                float: left;
+                width: 70px;
+                height: 20px;
+            }
+            div.field input {
+                height: 20px;
+                width: 200px;
+            }
+        </style>
+    </head>
+    <body>
+        <form action="${movie.id}" method="Post">
+            <div class="field">
+            <label>Title: </label>
+            <input type="text" name="title" autocomplete="off" value="${movie.title}" autofocus required>
+            </div><br>
+            <div class="field">
+            <label>Genre: </label>
+            <input type="text" name="genres" autocomplete="off" value="${genres}" required>
+            </div><br>
+            <div class="field">
+            <label>Year: </label>
+            <input type="number" name="year" autocomplete="off" value="${movie.year}" required>
+            </div><br>
+            <div class="field">
+            <label>Actors: </label>
+            <input type="text" name="actors" autocomplete="off" value="${actors}" required>
+            </div><br>
+            <div class="field">
+            <label>Director: </label>
+            <input type="text" name="director" autocomplete="off" value="${movie.director}" required>
+            </div><br>
+            <input type="submit" value="Edit chosen movie">
+        </form>
+    </body>
+</html>
