@@ -2,6 +2,8 @@ package by.iba.gomel.controller;
 
 import by.iba.gomel.Movie;
 import by.iba.gomel.MovieService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +17,8 @@ import java.util.List;
 @Controller
 public class FilmController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(FilmController.class);
+
     @Autowired
     private MovieService service;
 
@@ -26,7 +30,7 @@ public class FilmController {
     @GetMapping("/")
     public String getFilmPage(Model model) {
         List<Movie> movies = service.findAll();
-        System.out.println(movies);
+        LOGGER.info(movies.toString());
         model.addAttribute("movieList", movies);
         return "home";
     }
@@ -142,7 +146,7 @@ public class FilmController {
         movie.setGenre(List.of(genre));
         movie.setActor(List.of(actor));
         service.save(movie);
-        System.out.println(service.findAll());
+        LOGGER.info(service.findAll().toString());
         return "redirect:/";
     }
 }

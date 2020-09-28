@@ -65,7 +65,7 @@ public class Movie {
 
     @Override
     public String toString() {
-        return "Id=" + id + "-> Title: " + title;
+        return "Title: " + title + ", Actor: " + actor + ", Year: " + year;
     }
 
 }
