@@ -26,23 +26,23 @@
         <form action="/add" method="Post">
             <div class="field">
             <label>Title: </label>
-            <input type="text" name="title" autocomplete="off" autofocus required>
+            <input type="text" name="title" autocomplete="off" autofocus>
             </div><br>
             <div class="field">
             <label>Genre: </label>
-            <input type="text" name="genres" autocomplete="off" placeholder="musical, comedy, etc " required>
+            <input type="text" name="genres" autocomplete="off" placeholder="musical, comedy, etc ">
             </div><br>
             <div class="field">
             <label>Year: </label>
-            <input type="number" name="year" autocomplete="off" required>
+            <input type="number" name="year" autocomplete="off">
             </div><br>
             <div class="field">
             <label>Actors: </label>
-            <input type="text" name="actors" autocomplete="off" placeholder="Ryan Gosling, Ann Hathaway, etc" required>
+            <input type="text" name="actors" autocomplete="off" placeholder="Ryan Gosling, Ann Hathaway, etc">
             </div><br>
             <div class="field">
             <label>Director: </label>
-            <input type="text" name="director" autocomplete="off" required>
+            <input type="text" name="director" autocomplete="off">
             </div><br>
             <input type="submit" value="Add new film">
         </form>

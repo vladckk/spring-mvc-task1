@@ -2,6 +2,10 @@ package by.iba.gomel.controller;
 
 import by.iba.gomel.Movie;
 import by.iba.gomel.MovieService;
+import by.iba.gomel.exceptions.AlreadyExistFilmException;
+import by.iba.gomel.exceptions.FilmNotFoundException;
+import by.iba.gomel.exceptions.IncorrectFilmException;
+import by.iba.gomel.exceptions.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -24,8 +29,6 @@ public class FilmController {
 
     /**
      * Loads home page with table full of movies
-     * @param model
-     * @return
      */
     @GetMapping("/")
     public String getFilmPage(Model model) {
@@ -37,8 +40,6 @@ public class FilmController {
 
     /**
      * loads page for adding new movie to storage
-     * @param model
-     * @return
      */
     @GetMapping("/add")
     public String addNewFilmPage(Model model) {
@@ -47,17 +48,26 @@ public class FilmController {
 
     /**
      * Gets new data from form and adds it to the storage
-     * @param title
-     * @param year
-     * @param director
-     * @param genres
-     * @param actors
-     * @return
      */
     @PostMapping("/add")
     public String addNewFilm(@RequestParam(required=false) String title, @RequestParam(required=false) Integer year,
                              @RequestParam(required=false) String director, @RequestParam(required=false) String genres,
                              @RequestParam(required=false) String actors) {
+        if (title == null || year == null || director == null || genres == null || actors == null) {
+            LOGGER.info("Validation");
+            throw new ValidationException();
+        }
+        List<Movie> list = service.findByDirector(director);
+        boolean check = list.stream().filter(m -> m.getTitle().equals(title)).findFirst().isEmpty();
+        if (!check) {
+            LOGGER.info("Film already exists");
+            throw new AlreadyExistFilmException();
+        }
+        int currentYear = LocalDate.now().getYear();
+        if (year < 1850 || year > currentYear + 50) {
+            LOGGER.info("Incorrect film");
+            throw new IncorrectFilmException();
+        }
         Movie movie = new Movie();
         movie.setTitle(title);
         movie.setYear(year);
@@ -78,21 +88,20 @@ public class FilmController {
 
     /**
      * Deletes chosen movie from storage
-     * @param id
-     * @return
      */
     @GetMapping("delete/{id}")
     public String deleteItem(@PathVariable Long id) {
-        Movie movie = service.findById(id).get();
+        Movie movie = service.findById(1l).orElse(null);
+        if (movie == null) {
+            throw new FilmNotFoundException();
+        }
         service.delete(movie);
         return "redirect:/";
     }
 
     /**
      * Loads edit page with data of chosen movie
-     * @param id
-     * @param model
-     * @return
+     * @param id film's id
      */
     @GetMapping("edit/{id}")
     public String editItem(@PathVariable Long id, Model model) {
@@ -119,13 +128,6 @@ public class FilmController {
 
     /**
      * Switching new data with old
-     * @param id
-     * @param title
-     * @param year
-     * @param director
-     * @param genres
-     * @param actors
-     * @return
      */
     @PostMapping("edit/{id}")
     public String loadEditedItem(@PathVariable Long id, @RequestParam String title, @RequestParam Integer year,
